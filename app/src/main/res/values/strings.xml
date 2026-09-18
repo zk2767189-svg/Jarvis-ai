@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">JARVIS</string>
+    <string name="accessibility_service_description">Enables JARVIS voice-controlled system navigation such as Go Back and Minimize when authorized by you.</string>
+</resources>

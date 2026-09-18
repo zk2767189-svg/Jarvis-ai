@@ -1,0 +1,8 @@
+{
+  "name": "JARVIS",
+  "description": "Intelligent personal AI assistant for tasks, video prompts, YouTube scripts, automation, and voice interaction.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
