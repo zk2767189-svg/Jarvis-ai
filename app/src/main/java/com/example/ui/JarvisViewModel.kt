@@ -28,6 +28,7 @@ enum class JarvisTab {
     ASSISTANT,
     VIDEO_STUDIO,
     AUTOMATION,
+    TRANSLATOR,
     TASKS,
     SETTINGS
 }
@@ -618,6 +619,23 @@ class JarvisViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             voiceManager.stop()
             repository.clearChat()
+        }
+    }
+
+    fun translateText(
+        text: String,
+        fromLang: String,
+        toLang: String,
+        onResult: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            val result = repository.translateText(
+                text = text,
+                fromLang = fromLang,
+                toLang = toLang,
+                customKey = _customApiKey.value.ifBlank { null }
+            )
+            onResult(result)
         }
     }
 

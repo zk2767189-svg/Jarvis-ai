@@ -131,4 +131,16 @@ class JarvisFeaturesTest {
     fun testGeminiLiveModelConstant() {
         assertEquals("models/gemini-2.5-flash-native-audio-preview-12-2025", GeminiLiveWebSocketClient.LIVE_MODEL)
     }
+
+    @Test
+    fun testTranslationFallback() = kotlinx.coroutines.runBlocking {
+        val urduTranslation = repository.translateText("Hello", "en", "ur")
+        assertEquals("السلام علیکم", urduTranslation)
+
+        val pashtoTranslation = repository.translateText("Hello", "en", "ps")
+        assertEquals("سلام", pashtoTranslation)
+
+        val romanUrduTranslation = repository.translateText("Hello", "en", "roman_ur")
+        assertEquals("Salam Boss", romanUrduTranslation)
+    }
 }

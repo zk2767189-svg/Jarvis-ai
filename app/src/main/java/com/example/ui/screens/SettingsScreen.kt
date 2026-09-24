@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import com.example.ui.JarvisTab
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -415,6 +416,19 @@ fun SettingsScreen(
                             )
                         }
                     }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                OutlinedButton(
+                    onClick = { viewModel.setTab(JarvisTab.TRANSLATOR) },
+                    border = BorderStroke(1.dp, JarvisCyanCore),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = JarvisCyanCore),
+                    modifier = Modifier.fillMaxWidth().testTag("open_neural_translator_button")
+                ) {
+                    Icon(Icons.Default.Translate, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("OPEN NEURAL TRANSLATOR", fontSize = 12.sp, fontWeight = FontWeight.Bold)
                 }
             }
         }

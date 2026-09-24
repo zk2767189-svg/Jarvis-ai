@@ -424,4 +424,63 @@ Requirements:
             null
         }
     }
+
+    suspend fun translateText(
+        text: String,
+        fromLang: String,
+        toLang: String,
+        customKey: String? = null
+    ): Result<String> = withContext(Dispatchers.IO) {
+        val apiKey = getApiKey(customKey)
+        if (apiKey.isBlank()) {
+            return@withContext Result.failure(IllegalStateException("GEMINI_API_KEY_NOT_CONFIGURED"))
+        }
+
+        try {
+            val url = "$BASE_URL$DEFAULT_MODEL:generateContent?key=$apiKey"
+            val prompt = "You are JARVIS Neural Translation Subroutine. Translate the following text from language '$fromLang' into language '$toLang'. Output ONLY the clean, translated text with no extra conversational commentary, quotes, or markdown annotations:\n\n$text"
+
+            val jsonBody = JSONObject().apply {
+                put("generationConfig", JSONObject().apply {
+                    put("temperature", 0.3)
+                    put("maxOutputTokens", 1024)
+                })
+                val contentsArray = JSONArray()
+                contentsArray.put(JSONObject().apply {
+                    put("role", "user")
+                    put("parts", JSONArray().apply {
+                        put(JSONObject().apply { put("text", prompt) })
+                    })
+                })
+                put("contents", contentsArray)
+            }
+
+            val request = Request.Builder()
+                .url(url)
+                .post(jsonBody.toString().toRequestBody("application/json".toMediaType()))
+                .build()
+
+            val response = okHttpClient.newCall(request).execute()
+            val responseBody = response.body?.string().orEmpty()
+            if (response.isSuccessful && responseBody.isNotBlank()) {
+                val root = JSONObject(responseBody)
+                val candidates = root.optJSONArray("candidates")
+                if (candidates != null && candidates.length() > 0) {
+                    val firstCandidate = candidates.getJSONObject(0)
+                    val content = firstCandidate.optJSONObject("content")
+                    val parts = content?.optJSONArray("parts")
+                    if (parts != null && parts.length() > 0) {
+                        val resultText = parts.getJSONObject(0).optString("text").trim()
+                        if (resultText.isNotBlank()) {
+                            return@withContext Result.success(resultText)
+                        }
+                    }
+                }
+            }
+            Result.failure(Exception("Empty translation response"))
+        } catch (e: Exception) {
+            Log.e(TAG, "Error translating text with Gemini API", e)
+            Result.failure(e)
+        }
+    }
 }

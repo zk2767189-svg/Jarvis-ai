@@ -12,6 +12,7 @@ import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.FlashOn
 import androidx.compose.material.icons.filled.FolderSpecial
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -32,6 +33,7 @@ import com.example.ui.screens.AssistantScreen
 import com.example.ui.screens.AutomationHubScreen
 import com.example.ui.screens.SettingsScreen
 import com.example.ui.screens.TasksScreen
+import com.example.ui.screens.TranslatorScreen
 import com.example.ui.screens.VideoPromptStudioScreen
 import com.example.ui.components.CreateThirtySecondVideoModal
 import com.example.ui.theme.JarvisCyanCore
@@ -101,6 +103,21 @@ fun JarvisApp(
                 )
 
                 NavigationBarItem(
+                    selected = currentTab == JarvisTab.TRANSLATOR,
+                    onClick = { viewModel.setTab(JarvisTab.TRANSLATOR) },
+                    icon = { Icon(Icons.Default.Translate, contentDescription = "Translator") },
+                    label = { Text("Translate", fontSize = 11.sp, fontFamily = FontFamily.Monospace) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = JarvisVoidBlack,
+                        selectedTextColor = JarvisCyanCore,
+                        indicatorColor = JarvisCyanCore,
+                        unselectedIconColor = JarvisTextSecondary,
+                        unselectedTextColor = JarvisTextSecondary
+                    ),
+                    modifier = Modifier.testTag("nav_translator")
+                )
+
+                NavigationBarItem(
                     selected = currentTab == JarvisTab.TASKS,
                     onClick = { viewModel.setTab(JarvisTab.TASKS) },
                     icon = { Icon(Icons.Default.FolderSpecial, contentDescription = "Tasks") },
@@ -142,6 +159,7 @@ fun JarvisApp(
                     JarvisTab.ASSISTANT -> AssistantScreen(viewModel = viewModel)
                     JarvisTab.VIDEO_STUDIO -> VideoPromptStudioScreen(viewModel = viewModel)
                     JarvisTab.AUTOMATION -> AutomationHubScreen(viewModel = viewModel)
+                    JarvisTab.TRANSLATOR -> TranslatorScreen(viewModel = viewModel)
                     JarvisTab.TASKS -> TasksScreen(viewModel = viewModel)
                     JarvisTab.SETTINGS -> SettingsScreen(viewModel = viewModel)
                 }

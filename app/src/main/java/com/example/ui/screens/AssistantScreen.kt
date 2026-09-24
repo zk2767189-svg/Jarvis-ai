@@ -604,6 +604,13 @@ fun AssistantScreen(
                     modifier = Modifier.testTag("chip_create_30s_video")
                 )
                 AssistChip(
+                    onClick = { viewModel.setTab(JarvisTab.TRANSLATOR) },
+                    label = { Text("🌐 Translator", fontSize = 12.sp, color = JarvisCyanCore) },
+                    colors = AssistChipDefaults.assistChipColors(containerColor = JarvisSurfaceElevated),
+                    border = AssistChipDefaults.assistChipBorder(borderColor = JarvisCyanCore.copy(alpha = 0.5f), enabled = true),
+                    modifier = Modifier.testTag("chip_open_translator")
+                )
+                AssistChip(
                     onClick = {
                         viewModel.triggerQuickAction("What is the inspirational Quote of the Day, JARVIS?")
                     },
